@@ -1,0 +1,33 @@
+{
+  "name": "ember-cli-inline-images",
+  "version": "0.0.1",
+  "description": "Process CSS to turn inline-image('uri') into datauri images",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ember-addon",
+    "inline images",
+    "css"
+  ],
+  "ember-addon": {
+    "before": "broccoli-asset-rev"
+  },
+  "author": "Piotr Sarnacki",
+  "license": "MIT",
+  "dependencies": {
+    "broccoli-filter": "^0.1.6",
+    "datauri": "^0.6.0",
+    "lodash": "^3.1.0",
+    "object-assign": "^2.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/drogus/ember-cli-inline-images.git"
+  },
+  "bugs": {
+    "url": "https://github.com/drogus/ember-cli-inline-images/issues"
+  },
+  "homepage": "https://github.com/drogus/ember-cli-inline-images"
+}
