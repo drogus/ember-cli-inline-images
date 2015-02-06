@@ -11,9 +11,6 @@
     "inline images",
     "css"
   ],
-  "ember-addon": {
-    "before": "broccoli-asset-rev"
-  },
   "author": "Piotr Sarnacki",
   "license": "MIT",
   "dependencies": {
