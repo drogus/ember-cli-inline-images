@@ -42,23 +42,21 @@ function EmberCLIInlineImages(project) {
   this.name = 'Ember CLI Inline Images';
 }
 
-EmberCLIInlineImages.prototype.postprocessTree = function (type, tree) {
-  if ((type === 'all' || type === 'styles') && this.enabled) {
-    tree = InlineImagerFilter(tree, this.options);
-  }
-
-  return tree;
-};
-
 EmberCLIInlineImages.prototype.included = function included(app) {
   this.app = app;
-  this.options = defaults(this.app.options.inlineImager || {}, {
+  var options = defaults(this.app.options.inlineImager || {}, {
     enabled: true,
     imagesPath: 'public/images',
     root: app.project.root
   });
-  this.enabled = this.options.enabled;
-  delete this.options.enabled;
+
+  app.registry.add('css', {
+    name: 'ember-cli-inline-images',
+    ext: 'css',
+    toTree: function(tree) {
+      return InlineImagerFilter(tree, options);
+    }
+  });
 };
 
 EmberCLIInlineImages.prototype.treeFor = function treeFor() {};
