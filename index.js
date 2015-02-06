@@ -13,7 +13,7 @@ function process(str, options) {
   var dataUri, p;
   return str.replace(/inline-image\('?([^'\)]+)'?\)/g, function(match, url) {
     path = Path.join(options.path, url);
-    return 'url(' + Datauri(path) + ')';
+    return "url('" + Datauri(path) + "')";
   });
 }
 
