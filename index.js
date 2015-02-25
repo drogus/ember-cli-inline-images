@@ -10,31 +10,60 @@ var defaults = require('lodash').defaults;
 var Filter = require('broccoli-filter');
 
 function process(str, options) {
-  var dataUri, p;
-  return str.replace(/inline-image\('?([^'\)]+)'?\)/g, function(match, url) {
+  var dataUri, p, uri,
+      pattern = (options.functionName || 'inline-image') + "\\(['\"]?([^'\"\\)]+)['\"]?\\)",
+      regexp  = new RegExp(pattern, 'g');
+
+  return str.replace(regexp, function(match, url) {
     path = Path.join(options.path, url);
-    return "url('" + Datauri(path) + "')";
+    uri = "'" + Datauri(path) + "'";
+
+    if(options.wrapWithUrl) {
+      uri = "url(" + uri + ")";
+    }
+
+    return uri;
   });
 }
 
-function InlineImagerFilter(inputTree, options) {
-  if (!(this instanceof InlineImagerFilter)) {
-    return new InlineImagerFilter(inputTree, options);
+function CSSInlineImageFilter(inputTree, options) {
+  if (!(this instanceof CSSInlineImageFilter)) {
+    return new CSSInlineImageFilter(inputTree, options);
   }
 
   this.inputTree = inputTree;
   this.options = options || {};
 }
 
-InlineImagerFilter.prototype = Object.create(Filter.prototype);
-InlineImagerFilter.prototype.constructor = InlineImagerFilter;
+CSSInlineImageFilter.prototype = Object.create(Filter.prototype);
+CSSInlineImageFilter.prototype.constructor = CSSInlineImageFilter;
 
-InlineImagerFilter.prototype.extensions = ['css'];
-InlineImagerFilter.prototype.targetExtension = 'css';
+CSSInlineImageFilter.prototype.extensions = ['css'];
+CSSInlineImageFilter.prototype.targetExtension = 'css';
 
-InlineImagerFilter.prototype.processString = function (str, relativePath) {
+CSSInlineImageFilter.prototype.processString = function (str, relativePath) {
   var path = Path.join(this.options.root, this.options.imagesPath);
-  return process(str, { path: path });
+  return process(str, { path: path, wrapWithUrl: true });
+};
+
+function JSInlineImageFilter(inputTree, options) {
+  if (!(this instanceof JSInlineImageFilter)) {
+    return new JSInlineImageFilter(inputTree, options);
+  }
+
+  this.inputTree = inputTree;
+  this.options = options || {};
+}
+
+JSInlineImageFilter.prototype = Object.create(Filter.prototype);
+JSInlineImageFilter.prototype.constructor = JSInlineImageFilter;
+
+JSInlineImageFilter.prototype.extensions = ['js'];
+JSInlineImageFilter.prototype.targetExtension = 'js';
+
+JSInlineImageFilter.prototype.processString = function (str, relativePath) {
+  var path = Path.join(this.options.root, this.options.imagesPath);
+  return process(str, { path: path, functionName: '__inlineImageDataUri__' });
 };
 
 function EmberCLIInlineImages(project) {
@@ -54,7 +83,15 @@ EmberCLIInlineImages.prototype.included = function included(app) {
     name: 'ember-cli-inline-images',
     ext: 'css',
     toTree: function(tree) {
-      return InlineImagerFilter(tree, options);
+      return CSSInlineImageFilter(tree, options);
+    }
+  });
+
+  app.registry.add('js', {
+    name: 'ember-cli-inline-images',
+    ext: 'js',
+    toTree: function(tree) {
+      return JSInlineImageFilter(tree, options);
     }
   });
 };
