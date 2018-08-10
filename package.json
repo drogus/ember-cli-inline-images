@@ -4,7 +4,7 @@
   "description": "Process CSS to turn inline-image('uri') into datauri images",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "keywords": [
     "ember-addon",
