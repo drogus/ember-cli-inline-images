@@ -31,8 +31,8 @@ function CSSInlineImageFilter(inputTree, options) {
     return new CSSInlineImageFilter(inputTree, options);
   }
 
-  this.inputTree = inputTree;
   this.options = options || {};
+  Filter.call(this, inputTree);
 }
 
 CSSInlineImageFilter.prototype = Object.create(Filter.prototype);
@@ -51,8 +51,8 @@ function JSInlineImageFilter(inputTree, options) {
     return new JSInlineImageFilter(inputTree, options);
   }
 
-  this.inputTree = inputTree;
   this.options = options || {};
+  Filter.call(this, inputTree);
 }
 
 JSInlineImageFilter.prototype = Object.create(Filter.prototype);
@@ -99,3 +99,6 @@ EmberCLIInlineImages.prototype.included = function included(app) {
 EmberCLIInlineImages.prototype.treeFor = function treeFor() {};
 
 module.exports = EmberCLIInlineImages;
+
+module.exports.CSSInlineImageFilter = CSSInlineImageFilter;
+module.exports.JSInlineImageFilter = JSInlineImageFilter;
