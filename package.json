@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-inline-images",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Process CSS to turn inline-image('uri') into datauri images",
   "main": "index.js",
   "scripts": {
